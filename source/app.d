@@ -17,6 +17,8 @@ class TheMainWindow: MainWindow
 	{
 		super(title);
 		setDefaultSize(200, 200);
+		setResizable(false);
+		setIconFromFile("tic-tac-toe.png");
 
 		initializeChildren();
 
