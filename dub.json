@@ -1,0 +1,12 @@
+{
+	"name": "tic-tac-toe",
+	"authors": [
+		"laurent bernabe"
+	],
+	"description": "TicTacToe game",
+	"copyright": "Copyright © 2018, laurent bernabe",
+	"license": "gpl-3",
+	"dependencies" : {
+		"gtk-d": "~>3.8.2"
+	}
+}
