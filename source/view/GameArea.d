@@ -4,12 +4,16 @@ import gtk.DrawingArea;
 import gtk.Widget;
 import cairo.Context;
 
+import model.CellValueType;
+
 class GameArea : DrawingArea
 {
     private const int BORDER_DIMENSION = 3;
 	private const auto BORDER_COLOR = [200, 0, 120];
     private const auto CIRCLE_COLOR = [200, 0, 0];
     private const auto CROSS_COLOR = [0, 0, 200];
+
+    private CellValueType [3][] values;
 
     this(int width, int height)
     {
@@ -18,23 +22,48 @@ class GameArea : DrawingArea
         addOnDraw((Scoped!(Context) context, Widget widget)
         {
             drawArea(context);
+            drawPieces(context);
             return true;
         });
     }
 
-    void drawArea(Context context)
+    void refresh(CellValueType[3][] values)
+    {
+        this.values = values;
+        queueDraw();
+    }
+
+    private void drawArea(Context context)
     {
         foreach (const borderBigX; 1..3)
         {
             drawHorizontalBorder(context, borderBigX);
             drawVerticalBorder(context, borderBigX);
         }
-
-        drawCircle(context, 0, 2);
-        drawCross(context, 2, 0);
     }
 
-    void drawHorizontalBorder(Context context, const int borderBigX)
+    private void drawPieces(Context context)
+    {
+        foreach (const cellBigY; 0..3)
+        {
+            foreach (const cellBigX; 0..3)
+            {
+                final switch (values[cellBigY][cellBigX])
+                {
+                    case CellValueType.CROSS:
+                        drawCross(context, cellBigY, cellBigX);
+                        break;
+                    case CellValueType.CIRCLE:
+                        drawCircle(context, cellBigY, cellBigX);
+                        break;
+                    case CellValueType.NONE:
+                        break;
+                }
+            }
+        }
+    }
+
+    private void drawHorizontalBorder(Context context, const int borderBigX)
 	{
 		const int cellsSize = getAllocatedWidth() / 3;
 		const int borderX = cellsSize * borderBigX - BORDER_DIMENSION/2;
@@ -44,7 +73,7 @@ class GameArea : DrawingArea
 		context.fill();
 	}
 
-	void drawVerticalBorder(Context context, const int borderBigX)
+	private void drawVerticalBorder(Context context, const int borderBigX)
 	{
 		const int cellsSize = getAllocatedWidth() / 3;
 		const int borderY = cellsSize * borderBigX - BORDER_DIMENSION/2;
@@ -54,7 +83,7 @@ class GameArea : DrawingArea
 		context.fill();
 	}
 
-    void drawCircle(Context context, const int cellBigX, const int cellBigY)
+    private void drawCircle(Context context, const int cellBigX, const int cellBigY)
     {
         import std.math: PI;
 
@@ -73,7 +102,7 @@ class GameArea : DrawingArea
         context.restore();
     }
 
-    void drawCross(Context context, const int cellBigX, const int cellBigY)
+    private void drawCross(Context context, const int cellBigX, const int cellBigY)
     {
         const int cellsSize = getAllocatedWidth() / 3;
         const int crossCenterX = cast(int) (cellsSize * (0.5 + cellBigX));
