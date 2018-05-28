@@ -1,9 +1,11 @@
 module view.AppMainWindow;
 
 import gtk.MainWindow;
-import view.GameArea;
+import gtk.Widget;
+import gdk.Event;
 
 import model.GameState;
+import view.GameArea;
 
 export class AppMainWindow: MainWindow
 {
@@ -23,21 +25,35 @@ export class AppMainWindow: MainWindow
 		state.reset();
 		initializeChildren();
 
+		addOnButtonRelease(&clickCallBack);
+
 		showAll();
-
-
-		///////////////////
-		state.tryToSetCrossAt(2,0);
-		state.tryToSetCircleAt(2,0);
-		state.tryToSetCircleAt(1,1);
-		gameArea.refresh(state.getValues());
-		/////////////////////
 	}
 
 	void initializeChildren()
 	{
 		gameArea = new GameArea(GAME_ZONE_SIZE, GAME_ZONE_SIZE);
 		add(gameArea);
+	}
+
+	bool clickCallBack(Event event, Widget widget)
+	{
+		uint eventButton;
+			event.getButton(eventButton);
+			const int LEFT_BUTTON = 1;
+
+			if (eventButton == LEFT_BUTTON)
+			{
+				double eventX, eventY;
+				event.getCoords(eventX, eventY);
+
+				const int cellBigX = cast(int) (eventX / (GAME_ZONE_SIZE / 3));
+				const int cellBigY = cast(int) (eventY / (GAME_ZONE_SIZE / 3));
+
+				state.tryToSetCircleAt(cellBigY, cellBigX);
+				gameArea.refresh(state.getValues());
+			}
+			return true;
 	}
 
 }

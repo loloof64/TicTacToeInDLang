@@ -13,7 +13,7 @@ class GameArea : DrawingArea
     private const auto CIRCLE_COLOR = [200, 0, 0];
     private const auto CROSS_COLOR = [0, 0, 200];
 
-    private CellValueType [3][] values;
+    private CellValueType [3][3] values = new CellValueType [3][3];
 
     this(int width, int height)
     {
@@ -27,7 +27,7 @@ class GameArea : DrawingArea
         });
     }
 
-    void refresh(CellValueType[3][] values)
+    void refresh(CellValueType[3][3] values)
     {
         this.values = values;
         queueDraw();
@@ -83,7 +83,7 @@ class GameArea : DrawingArea
 		context.fill();
 	}
 
-    private void drawCircle(Context context, const int cellBigX, const int cellBigY)
+    private void drawCircle(Context context, const int cellBigY, const int cellBigX)
     {
         import std.math: PI;
 
@@ -102,7 +102,7 @@ class GameArea : DrawingArea
         context.restore();
     }
 
-    private void drawCross(Context context, const int cellBigX, const int cellBigY)
+    private void drawCross(Context context, const int cellBigY, const int cellBigX)
     {
         const int cellsSize = getAllocatedWidth() / 3;
         const int crossCenterX = cast(int) (cellsSize * (0.5 + cellBigX));

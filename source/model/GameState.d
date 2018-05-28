@@ -49,8 +49,15 @@ class GameState
         return success;
     }
 
-    CellValueType[3][] getValues()
+    CellValueType[3][3] getValues()
     {
-        return values.dup;
+        CellValueType[3] getValuesLine(int line)
+        {
+            return [values[line][0], values[line][1], values[line][2]];
+        }
+
+        return [
+            getValuesLine(0), getValuesLine(1), getValuesLine(2)
+        ];
     }
 }
