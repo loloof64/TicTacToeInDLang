@@ -50,8 +50,11 @@ export class AppMainWindow: MainWindow
 				const int cellBigX = cast(int) (eventX / (GAME_ZONE_SIZE / 3));
 				const int cellBigY = cast(int) (eventY / (GAME_ZONE_SIZE / 3));
 
-				state.tryToSetCircleAt(cellBigY, cellBigX);
-				gameArea.refresh(state.getValues());
+				if (state.tryToSetAPieceAt(cellBigY, cellBigX))
+				{
+					state.toggleTurn();
+					gameArea.refresh(state.getValues());
+				}
 			}
 			return true;
 	}

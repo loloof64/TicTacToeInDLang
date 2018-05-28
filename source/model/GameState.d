@@ -5,6 +5,7 @@ import model.CellValueType;
 class GameState
 {
     private auto values = new CellValueType [3][3];
+    private auto turn = CellValueType.CIRCLE;
 
     void reset()
     {
@@ -17,7 +18,24 @@ class GameState
         }
     }
 
-    bool tryToSetCrossAt(int bigCellY, int bigCellX)
+    bool tryToSetAPieceAt(int bigCellY, int bigCellX)
+    {
+        return turn == CellValueType.CIRCLE ?
+            tryToSetCircleAt(bigCellY, bigCellX) :
+            tryToSetCrossAt(bigCellY, bigCellX);
+    }
+
+    CellValueType getTurn()
+    {
+        return turn;
+    }
+
+    void toggleTurn()
+    {
+        turn = turn == CellValueType.CIRCLE ? CellValueType.CROSS : CellValueType.CIRCLE;
+    }
+
+    private bool tryToSetCrossAt(int bigCellY, int bigCellX)
     {
         bool success;
 
@@ -33,7 +51,7 @@ class GameState
         return success;
     }
 
-    bool tryToSetCircleAt(int bigCellY, int bigCellX)
+    private bool tryToSetCircleAt(int bigCellY, int bigCellX)
     {
         bool success;
         
